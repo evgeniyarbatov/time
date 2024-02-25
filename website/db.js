@@ -43,6 +43,7 @@ function renderDBRecords() {
             ExpressionAttributeValues: {
                 ":id": selectedClockOption.value,
             },
+            Limit: 100
         }, function(err, data) {
             if (err) {
                 console.error('Failed to scan DynamoDB', err);
