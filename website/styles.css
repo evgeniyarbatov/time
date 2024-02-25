@@ -49,8 +49,8 @@ input {
     padding-top: 20px;
 }
 #notice {
+    font-size: 25px;
     display: none;
-    color: green; /* Change text color to green */
     background-color: white;
     padding: 5px 10px;
 }

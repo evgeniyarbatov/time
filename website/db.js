@@ -39,17 +39,15 @@ function renderDBRecords() {
         docClient = new AWS.DynamoDB.DocumentClient();
         docClient.scan({
             TableName: 'clock-tracker',
-            // FilterExpression: 'clockId = :id',
-            // ExpressionAttributeValues: {
-            //     ":id": { S: selectedClockOption.value },
-            // },
+            FilterExpression: 'clockId = :id',
+            ExpressionAttributeValues: {
+                ":id": selectedClockOption.value,
+            },
         }, function(err, data) {
             if (err) {
                 console.error('Failed to scan DynamoDB', err);
                 return;
             }
-
-            console.log(JSON.stringify(data, null, 2));
 
             var tableContainer = document.getElementById('clock-records');
             var table = document.createElement('table');
