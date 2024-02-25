@@ -1,0 +1,50 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+select { 
+    font-size: 25px; 
+    width: 100%;
+}
+button { 
+    font-size: 50px;
+    width: 100%;
+}
+input {
+    border: none;
+    outline: none; 
+    background-color: #f0f0f0;
+}
+.container {
+    font-size: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+.input-field {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.input-field label {
+    display: inline-block;
+    width: 200px;
+}
+.input-field input {
+    width: 100px;
+    font-size: 50px;
+}
+.button {
+    padding: 5px 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+#clock-records {
+    font-size: 25px;
+    padding-top: 20px;
+}

@@ -3,65 +3,9 @@
 <head>
     <title>Clock Tracker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
-    <script>
-        AWS.config.region = 'ap-southeast-1';
-        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: 'ap-southeast-1:81202562-9736-4d84-b6db-ef1ac336bba6'
-        });
-    </script>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-        }
-        select { 
-            font-size: 25px; 
-            width: 100%;
-        }
-        button { 
-            font-size: 50px;
-            width: 100%;
-        }
-        input {
-            border: none;
-            outline: none; 
-            background-color: #f0f0f0;
-        }
-        .container {
-            font-size: 50px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100vw;
-            height: 100vh;
-        }
-        .input-field {
-            padding-top: 10px;
-            padding-bottom: 10px;
-        }
-        .input-field label {
-            display: inline-block;
-            width: 200px;
-        }
-        .input-field input {
-            width: 100px;
-            font-size: 50px;
-        }
-        .button {
-            padding: 5px 10px;
-            background-color: black;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        #clock-records {
-            font-size: 25px;
-            margin: 50px;
-        }
-    </style>
+    <script src="db.js"></script>
 </head>
 <body>
     <div class="container">
@@ -89,73 +33,25 @@
         <div id="clock-records"></div>
     </div>
     <script>
-        const now = new Date();
-        document.getElementById('hours').value = now.getHours();
-        document.getElementById('minutes').value = now.getMinutes();
-        document.getElementById('seconds').value = now.getSeconds();
-    </script>
-    <script>
-        document.getElementById('clock-form').addEventListener('submit', function(event) {
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('hours').value = now.getHours();
+            document.getElementById('minutes').value = now.getMinutes();
+            document.getElementById('seconds').value = now.getSeconds();
+        }
+        updateTime();
+        intervalId = setInterval(updateTime, 1000);
+
+        var form = document.getElementById('clock-form');
+        form.addEventListener('focus', function() {
+            clearInterval(intervalId);
+        }, true);
+        form.addEventListener('submit', function(event) {
             event.preventDefault();
-
-            AWS.config.credentials.get(function(err) {
-                if (err) {
-                    return;
-                }
-
-                var clockDate = new Date();
-                clockDate.setHours(document.getElementById('hours').value);
-                clockDate.setMinutes(document.getElementById('minutes').value);
-                clockDate.setSeconds(document.getElementById('seconds').value);
-
-                docClient = new AWS.DynamoDB.DocumentClient();
-                docClient.put({
-                    TableName: 'clock-tracker',
-                    Item: {
-                        'timestamp': Math.floor(Date.now() / 1000),
-                        'clock-id':  document.getElementById('clock-id').value,
-                        'clock-timestamp': Math.floor(clockDate.getTime() / 1000),
-                    }
-                }, function(err, data) {
-                    if (err) {
-                        console.log(err);
-                        return;
-                    }
-                });
-            });
+            saveToDB();
         });
-    </script>
-    <script> 
-        AWS.config.credentials.get(function(err) {
-            if (err) {
-                return;
-            }
-            docClient = new AWS.DynamoDB.DocumentClient();
-            docClient.scan({
-                TableName: 'clock-tracker',
-            }, function(err, data) {
-                if (err) {
-                    return;
-                }
 
-                console.log(JSON.stringify(data, null, 2));
-
-                var tableContainer = document.getElementById('clock-records');
-                var table = document.createElement('table');
-
-                data.Items.forEach(function(item) {
-                    var row = table.insertRow();
-                    for (var key in item) {
-                        if (['clock-timestamp', 'timestamp'].includes(key)) {
-                            var cell = row.insertCell();
-                            cell.textContent = item[key];
-                        }
-                    }
-                });
-
-                tableContainer.appendChild(table);
-            });
-        });
+        renderDBRecords();
     </script>
 </body>
 </html>

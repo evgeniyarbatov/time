@@ -1,0 +1,90 @@
+AWS.config.region = 'ap-southeast-1';
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'ap-southeast-1:81202562-9736-4d84-b6db-ef1ac336bba6'
+});
+
+function epochToDaysAgo(epochTimestamp) {
+    var currentTime = Date.now() / 1000;
+    var difference = currentTime - epochTimestamp;
+    var days = Math.floor(difference / (60 * 60 * 24));
+    var result = days > 0 ? days + " days ago" : "today";
+    return result;
+}
+
+function clockTimeDelta(now, clockTime) {
+    const delta = Math.abs(clockTime - now);
+    return clockTime > now ? delta + "s ahead" : delta + "s behind";
+}
+
+function renderDBRecords() {
+    AWS.config.credentials.get(function(err) {
+        if (err) {
+            console.error('Failed to get AWS credentials', err);
+            return;
+        }
+
+        var selectedClock = document.getElementById('clock-id');
+        var selectedClockIndex = selectedClock.selectedIndex;
+        var selectedClockOption = selectedClock.options[selectedClockIndex];
+
+        docClient = new AWS.DynamoDB.DocumentClient();
+        docClient.scan({
+            TableName: 'clock-tracker',
+            // FilterExpression: 'clockId = :id',
+            // ExpressionAttributeValues: {
+            //     ":id": { S: selectedClockOption.value },
+            // },
+        }, function(err, data) {
+            if (err) {
+                console.error('Failed to scan DynamoDB', err);
+                return;
+            }
+
+            console.log(JSON.stringify(data, null, 2));
+
+            var tableContainer = document.getElementById('clock-records');
+            var table = document.createElement('table');
+
+            data.Items.forEach(function(item) {
+                var row = table.insertRow();
+
+                var cell = row.insertCell()
+                cell.textContent = epochToDaysAgo(item['timestamp']);
+
+                var cell = row.insertCell()
+                cell.textContent = clockTimeDelta(item['timestamp'], item['clockTimestamp']);
+            });
+
+            tableContainer.appendChild(table);
+        });
+    });
+}
+
+function saveToDB() {
+    AWS.config.credentials.get(function(err) {
+        if (err) {
+            console.error('Failed to get AWS credentials', err);
+            return;
+        }
+
+        var clockDate = new Date();
+        clockDate.setHours(document.getElementById('hours').value);
+        clockDate.setMinutes(document.getElementById('minutes').value);
+        clockDate.setSeconds(document.getElementById('seconds').value);
+
+        docClient = new AWS.DynamoDB.DocumentClient();
+        docClient.put({
+            TableName: 'clock-tracker',
+            Item: {
+                'timestamp': Math.floor(Date.now() / 1000),
+                'clockId':  document.getElementById('clock-id').value,
+                'clockTimestamp': Math.floor(clockDate.getTime() / 1000),
+            }
+        }, function(err, data) {
+            if (err) {
+                console.error('Failed to update DynamoDB', err);
+                return;
+            }
+        });
+    });
+}
