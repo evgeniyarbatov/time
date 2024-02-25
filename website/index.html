@@ -32,7 +32,9 @@
         .container {
             font-size: 50px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             width: 100vw;
             height: 100vh;
         }
@@ -54,6 +56,10 @@
             color: white;
             border: none;
             cursor: pointer;
+        }
+        #clock-records {
+            font-size: 25px;
+            margin: 50px;
         }
     </style>
 </head>
@@ -80,6 +86,7 @@
             </div>
             <button class="button" type="submit">Submit</button>
         </form>
+        <div id="clock-records"></div>
     </div>
     <script>
         const now = new Date();
@@ -89,6 +96,8 @@
     </script>
     <script>
         document.getElementById('clock-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
             AWS.config.credentials.get(function(err) {
                 if (err) {
                     return;
@@ -116,7 +125,6 @@
             });
         });
     </script>
-
     <script> 
         AWS.config.credentials.get(function(err) {
             if (err) {
@@ -129,7 +137,23 @@
                 if (err) {
                     return;
                 }
+
                 console.log(JSON.stringify(data, null, 2));
+
+                var tableContainer = document.getElementById('clock-records');
+                var table = document.createElement('table');
+
+                data.Items.forEach(function(item) {
+                    var row = table.insertRow();
+                    for (var key in item) {
+                        if (['clock-timestamp', 'timestamp'].includes(key)) {
+                            var cell = row.insertCell();
+                            cell.textContent = item[key];
+                        }
+                    }
+                });
+
+                tableContainer.appendChild(table);
             });
         });
     </script>
