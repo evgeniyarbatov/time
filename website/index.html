@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Time Input Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        select { 
+            font-size: 25px; 
+            width: 100%;
+        }
+        button { 
+            font-size: 50px;
+            width: 100%;
+        }
+        input {
+            border: none;
+            outline: none; 
+            background-color: #f0f0f0;
+        }
+        .container {
+            font-size: 50px;
+            display: flex;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+        }
+        .input-field {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        .input-field label {
+            display: inline-block;
+            width: 200px;
+        }
+        .input-field input {
+            width: 100px;
+            font-size: 50px;
+        }
+        .button {
+            padding: 5px 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form>
+            <select id="clocks" name="clocks">
+                <option value="seiko-watch">Seiko Watch</option>
+                <option value="hamilton-watch">Hamilton Watch</option>
+                <option value="living-room-clock">Living Room Clock</option>
+                <option value="bedroom-clock">Bedroom Clock</option>
+            </select>
+            <div class="input-field">
+                <label for="hours">Hours:</label>
+                <input type="number" id="hours" min="0" max="23" value="0">
+            </div>
+            <div class="input-field">
+                <label for="minutes">Minutes:</label>
+                <input type="number" id="minutes" min="0" max="59" value="0">
+            </div>
+            <div class="input-field">
+                <label for="seconds">Seconds:</label>
+                <input type="number" id="seconds" min="0" max="59" value="0">
+            </div>
+            <button class="button" type="submit">Submit</button>
+        </form>
+    </div>
+    <script>
+        const now = new Date();
+        document.getElementById('hours').value = now.getHours();
+        document.getElementById('minutes').value = now.getMinutes();
+        document.getElementById('seconds').value = now.getSeconds();
+    </script>
+</body>
+</html>
