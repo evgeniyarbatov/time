@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="container">
+        <div id="notice"></div>
         <form id="clock-form">
             <select id="clock-id">
                 <option value="seiko-watch">Seiko Watch</option>
@@ -43,9 +44,11 @@
         intervalId = setInterval(updateTime, 1000);
 
         var form = document.getElementById('clock-form');
+
         form.addEventListener('focus', function() {
             clearInterval(intervalId);
         }, true);
+
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             saveToDB();

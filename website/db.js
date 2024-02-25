@@ -16,6 +16,15 @@ function clockTimeDelta(now, clockTime) {
     return clockTime > now ? delta + "s ahead" : delta + "s behind";
 }
 
+function renderNotice(text) {
+    const notice = document.getElementById('notice');
+    notice.textContent = text;
+    notice.style.display = 'block';
+    setTimeout(() => {
+      notice.style.display = 'none';
+    }, 3000);
+}
+
 function renderDBRecords() {
     AWS.config.credentials.get(function(err) {
         if (err) {
@@ -85,6 +94,7 @@ function saveToDB() {
                 console.error('Failed to update DynamoDB', err);
                 return;
             }
+            renderNotice('Saved');
         });
     });
 }
