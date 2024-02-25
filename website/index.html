@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Time Input Form</title>
+    <title>Clock Tracker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
     <style>
         body, html {
             margin: 0;
@@ -79,6 +80,30 @@
         document.getElementById('hours').value = now.getHours();
         document.getElementById('minutes').value = now.getMinutes();
         document.getElementById('seconds').value = now.getSeconds();
+    </script>
+    <script>
+        AWS.config.region = 'ap-southeast-1';
+
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'ap-southeast-1:81202562-9736-4d84-b6db-ef1ac336bba6'
+        });
+
+        AWS.config.credentials.get(function(err) {
+            if (err) {
+                return;
+            }
+            
+            var docClient = new AWS.DynamoDB.DocumentClient();
+            docClient.scan({
+                TableName: 'clock-tracker'
+            }, function(err, data) {
+                if (err) {
+                   return;
+                }
+                
+                console.log(JSON.stringify(data, null, 2));
+            });
+        });
     </script>
 </body>
 </html>
