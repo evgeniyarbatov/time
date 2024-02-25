@@ -4,6 +4,12 @@
     <title>Clock Tracker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
+    <script>
+        AWS.config.region = 'ap-southeast-1';
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'ap-southeast-1:81202562-9736-4d84-b6db-ef1ac336bba6'
+        });
+    </script>
     <style>
         body, html {
             margin: 0;
@@ -53,8 +59,8 @@
 </head>
 <body>
     <div class="container">
-        <form>
-            <select id="clocks" name="clocks">
+        <form id="clock-form">
+            <select id="clock-id">
                 <option value="seiko-watch">Seiko Watch</option>
                 <option value="hamilton-watch">Hamilton Watch</option>
                 <option value="living-room-clock">Living Room Clock</option>
@@ -82,25 +88,47 @@
         document.getElementById('seconds').value = now.getSeconds();
     </script>
     <script>
-        AWS.config.region = 'ap-southeast-1';
+        document.getElementById('clock-form').addEventListener('submit', function(event) {
+            AWS.config.credentials.get(function(err) {
+                if (err) {
+                    return;
+                }
 
-        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: 'ap-southeast-1:81202562-9736-4d84-b6db-ef1ac336bba6'
+                var clockDate = new Date();
+                clockDate.setHours(document.getElementById('hours').value);
+                clockDate.setMinutes(document.getElementById('minutes').value);
+                clockDate.setSeconds(document.getElementById('seconds').value);
+
+                docClient = new AWS.DynamoDB.DocumentClient();
+                docClient.put({
+                    TableName: 'clock-tracker',
+                    Item: {
+                        'timestamp': Math.floor(Date.now() / 1000),
+                        'clock-id':  document.getElementById('clock-id').value,
+                        'clock-timestamp': Math.floor(clockDate.getTime() / 1000),
+                    }
+                }, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                });
+            });
         });
+    </script>
 
+    <script> 
         AWS.config.credentials.get(function(err) {
             if (err) {
                 return;
             }
-            
-            var docClient = new AWS.DynamoDB.DocumentClient();
+            docClient = new AWS.DynamoDB.DocumentClient();
             docClient.scan({
-                TableName: 'clock-tracker'
+                TableName: 'clock-tracker',
             }, function(err, data) {
                 if (err) {
-                   return;
+                    return;
                 }
-                
                 console.log(JSON.stringify(data, null, 2));
             });
         });
