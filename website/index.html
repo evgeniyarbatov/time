@@ -50,6 +50,9 @@
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             saveToDB();
+            setTimeout(function() {
+                location.reload();
+            }, 5000); 
         });
 
         const select = document.getElementById('clock-id');
