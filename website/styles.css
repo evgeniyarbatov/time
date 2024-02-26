@@ -15,6 +15,22 @@ input {
     border: none;
     outline: none; 
     background-color: #f0f0f0;
+    font-size: 50px;
+}
+input[type="number"] {
+    width: 80px;
+    text-align: center;
+}
+input[type='number']::-webkit-inner-spin-button, 
+input[type='number']::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    margin: 0;
+}
+.input-container {
+    display: inline-block;
+    text-align: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
 .container {
     font-size: 50px;
@@ -25,24 +41,16 @@ input {
     width: 100vw;
     height: 100vh;
 }
-.input-field {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-.input-field label {
-    display: inline-block;
-    width: 200px;
-}
-.input-field input {
-    width: 100px;
-    font-size: 50px;
-}
 .button {
     padding: 5px 10px;
     background-color: black;
     color: white;
     border: none;
     cursor: pointer;
+}
+.clock-digits {
+    width: 100%;
+    text-align: center;
 }
 #clock-records {
     font-size: 25px;
