@@ -52,9 +52,13 @@ input[type='number']::-webkit-outer-spin-button {
     width: 100%;
     text-align: center;
 }
+table { 
+    width: 100%;
+}
 #clock-records {
     font-size: 25px;
-    padding-top: 20px;
+    padding-top: 10px;
+    text-align: center;
 }
 #notice {
     font-size: 25px;

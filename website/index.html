@@ -42,25 +42,25 @@
             document.getElementById('seconds').value = now.getSeconds();
         }
         updateTime();
-        // Refresh the page every second with latest time
         intervalId = setInterval(updateTime, 1000);
 
         var form = document.getElementById('clock-form');
+
         form.addEventListener('keydown', function() {
             clearInterval(intervalId);
         }, true);
+
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             saveToDB();
-            // Refresh the page to display what we saved
             setTimeout(function() {
                 location.reload();
             }, 5000); 
         });
 
         const clockSelect = document.getElementById('clock-id');
+        
         clockSelect.addEventListener('change', function() {
-            // Remove earlier records we may have rendered
             const div = document.getElementById('clock-records');
             while (div.firstChild) {
                 div.removeChild(div.firstChild);

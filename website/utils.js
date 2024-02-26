@@ -55,12 +55,10 @@ function renderDBRecords() {
 
             data.Items.forEach(function(item) {
                 var row = table.insertRow();
-
                 var cell = row.insertCell()
-                cell.textContent = epochToDaysAgo(item['timestamp']);
 
-                var cell = row.insertCell()
-                cell.textContent = clockTimeDelta(item['timestamp'], item['clockTimestamp']);
+                cell.textContent = epochToDaysAgo(item['timestamp']) + 
+                ' ' + clockTimeDelta(item['timestamp'], item['clockTimestamp']);
             });
 
             tableContainer.appendChild(table);
