@@ -41,13 +41,6 @@ input[type='number']::-webkit-outer-spin-button {
     width: 100vw;
     height: 100vh;
 }
-.button {
-    padding: 5px 10px;
-    background-color: black;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
 .clock-digits {
     width: 100%;
     text-align: center;
@@ -61,9 +54,6 @@ table {
     text-align: center;
 }
 #notice {
-    text-align: center;
-    font-size: 25px;
     display: none;
-    background-color: white;
-    padding: 5px 10px;
+    font-size: 1rem;
 }

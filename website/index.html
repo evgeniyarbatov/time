@@ -5,18 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="utils.js"></script>
 </head>
 <body>
     <div class="container">
-        <div id="notice"></div>
         <form id="clock-form">
-            <select id="clock-id">
-                <option value="seiko-watch">Seiko Watch</option>
-                <option value="hamilton-watch">Hamilton Watch</option>
-                <option value="living-room-clock">Living Room Clock</option>
-                <option value="bedroom-clock">Bedroom Clock</option>
-            </select>
+            <div id="notice" class="alert alert-success" role="alert"></div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="seiko-watch">
+                    Seiko Watch
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#" data-value="hamilton-watch">Hamilton Watch</a>
+                  <a class="dropdown-item" href="#" data-value="living-room-clock">Living Room Clock</a>
+                  <a class="dropdown-item" href="#" data-value="bedroom-clock">Bedroom Clock</a>
+                </div>
+            </div>
             <div class="clock-digits">
                 <div class="input-container">
                     <input type="number" id="hours" min="0" max="23" value="0">
@@ -30,7 +35,8 @@
                     <input type="number" id="seconds" min="0" max="59" value="0">
                 </div>
             <div>
-            <button class="button" type="submit">Submit</button>
+            <button id="record" type="button" class="btn btn-primary mb-0">Record</button>
+            <button id="set" type="button" class="btn btn-secondary mb-5">Set</button>
         </form>
         <div id="clock-records"></div>
     </div>
@@ -45,30 +51,37 @@
         intervalId = setInterval(updateTime, 1000);
 
         var form = document.getElementById('clock-form');
-
         form.addEventListener('keydown', function() {
             clearInterval(intervalId);
         }, true);
 
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            saveToDB();
-            setTimeout(function() {
-                location.reload();
-            }, 5000); 
+        var clockID = document.getElementById('dropdownMenuButton').getAttribute('data-value');
+        document.querySelectorAll('.dropdown-item').forEach(function(item) {
+            item.addEventListener('click', function(event) {
+                clockID = event.target.getAttribute('data-value');
+                renderDBRecords(clockID);
+
+                const div = document.getElementById('clock-records');
+                while (div.firstChild) {
+                    div.removeChild(div.firstChild);
+                }
+            });
         });
 
-        const clockSelect = document.getElementById('clock-id');
-
-        clockSelect.addEventListener('change', function() {
-            const div = document.getElementById('clock-records');
-            while (div.firstChild) {
-                div.removeChild(div.firstChild);
-            }
-            renderDBRecords();
+        var buttons = document.querySelectorAll('button');        
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                saveToDB(event.target.id, clockID);
+                setTimeout(function() {
+                    location.reload();
+                }, 5000); 
+            });
         });
 
-        renderDBRecords();
+
+
+        renderDBRecords(clockID);
     </script>
 </body>
 </html>

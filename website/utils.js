@@ -20,28 +20,21 @@ function renderNotice(text) {
     const notice = document.getElementById('notice');
     notice.textContent = text;
     notice.style.display = 'block';
-    setTimeout(() => {
-      notice.style.display = 'none';
-    }, 3000);
 }
 
-function renderDBRecords() {
+function renderDBRecords(clockID) {
     AWS.config.credentials.get(function(err) {
         if (err) {
             console.error('Failed to get AWS credentials', err);
             return;
         }
 
-        var selectedClock = document.getElementById('clock-id');
-        var selectedClockIndex = selectedClock.selectedIndex;
-        var selectedClockOption = selectedClock.options[selectedClockIndex];
-
         docClient = new AWS.DynamoDB.DocumentClient();
         docClient.scan({
             TableName: 'clock-tracker',
             FilterExpression: 'clockId = :id',
             ExpressionAttributeValues: {
-                ":id": selectedClockOption.value,
+                ":id": clockID,
             },
             Limit: 100
         }, function(err, data) {
@@ -66,7 +59,7 @@ function renderDBRecords() {
     });
 }
 
-function saveToDB() {
+function saveToDB(event, clockID) {
     AWS.config.credentials.get(function(err) {
         if (err) {
             console.error('Failed to get AWS credentials', err);
@@ -83,8 +76,9 @@ function saveToDB() {
             TableName: 'clock-tracker',
             Item: {
                 'timestamp': Math.floor(Date.now() / 1000),
-                'clockId':  document.getElementById('clock-id').value,
+                'clockId': clockID,
                 'clockTimestamp': Math.floor(clockDate.getTime() / 1000),
+                'event': event,
             }
         }, function(err, data) {
             if (err) {
