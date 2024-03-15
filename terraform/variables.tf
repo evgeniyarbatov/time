@@ -10,7 +10,7 @@ variable "domain_name" {
 
 variable "bucket_name" {
   type    = string
-  default = "arbatov.me-clock-set"
+  default = "arbatov.me-clocks"
 }
 
 variable "path_name" {
