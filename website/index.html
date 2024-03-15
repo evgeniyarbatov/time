@@ -12,7 +12,7 @@
 <body>
     <div class="container">
         <form id="clock-form">
-            <div id="notice" class="alert alert-success" role="alert"></div>
+            <div id="notice" class="alert alert-success mt-1 mb-1" role="alert"></div>
             <div class="dropdown-center">
               <div class="dropdown">
                 <button
@@ -102,9 +102,6 @@
             button.addEventListener('click', function(event) {
                 event.preventDefault();
                 saveToDB(event.target.id, clockID);
-                setTimeout(function() {
-                    location.reload();
-                }, 5000); 
             });
         });
 
