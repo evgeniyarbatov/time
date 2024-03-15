@@ -13,7 +13,7 @@
         <form id="clock-form">
             <div id="notice" class="alert alert-success" role="alert"></div>
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="seiko-watch">
+                <button class="btn btn-lg btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="seiko-watch">
                     Seiko Watch
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -35,8 +35,10 @@
                     <input type="number" id="seconds" min="0" max="59" value="0">
                 </div>
             <div>
-            <button id="record" type="button" class="btn btn-primary mb-0">Record</button>
-            <button id="set" type="button" class="btn btn-secondary mb-5">Set</button>
+            <div class="controls">
+                <button id="record" type="button" class="btn btn-primary mb-0">Record</button>
+                <button id="set" type="button" class="btn btn-secondary mb-5">Set</button>
+            </div>
         </form>
         <div id="clock-records"></div>
     </div>
@@ -68,7 +70,7 @@
             });
         });
 
-        var buttons = document.querySelectorAll('button');        
+        var buttons = document.querySelectorAll('.controls button');        
         buttons.forEach(function(button) {
             button.addEventListener('click', function(event) {
                 event.preventDefault();
@@ -78,8 +80,6 @@
                 }, 5000); 
             });
         });
-
-
 
         renderDBRecords(clockID);
     </script>
