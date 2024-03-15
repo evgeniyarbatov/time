@@ -57,3 +57,12 @@ table {
     display: none;
     font-size: 1rem;
 }
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Adjust the gap between buttons */
+}
+.controls button {
+    margin: 0; /* Reset margin */
+    padding: 5px 10px; /* Adjust padding as needed */
+}
