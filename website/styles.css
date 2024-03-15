@@ -66,3 +66,11 @@ table {
     margin: 0; /* Reset margin */
     padding: 5px 10px; /* Adjust padding as needed */
 }
+.dropdown-menu {
+  width: 100%;
+  padding: 0;
+}
+.dropdown-item {
+  width: 100%;
+  white-space: nowrap;
+}

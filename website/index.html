@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" >
+	  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" >
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="utils.js"></script>
 </head>
@@ -13,15 +13,39 @@
     <div class="container">
         <form id="clock-form">
             <div id="notice" class="alert alert-success" role="alert"></div>
-            <div class="dropdown">
-                <button class="btn btn-lg btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-value="seiko-watch">
-                    Seiko Watch
+            <div class="dropdown-center">
+              <div class="dropdown">
+                <button
+                  id="dropdown-button"
+                  class="btn btn-lg btn-secondary dropdown-toggle" 
+                  type="button" 
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false">
+                  Select Clock
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#" data-value="hamilton-watch">Hamilton Watch</a>
-                  <a class="dropdown-item" href="#" data-value="living-room-clock">Living Room Clock</a>
-                  <a class="dropdown-item" href="#" data-value="bedroom-clock">Bedroom Clock</a>
-                </div>
+                <ul class="dropdown-menu" style="">
+                  <li>
+                    <a class="dropdown-item" href="#" data-value="seiko-watch">
+                      Seiko Watch
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-value="hamilton-watch">
+                      Hamilton Watch
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-value="living-room-clock">
+                      Living Room Clock
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-value="bedroom-clock">
+                      Bedroom Clock
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
             <div class="clock-digits">
                 <div class="input-container">
@@ -58,9 +82,11 @@
             clearInterval(intervalId);
         }, true);
 
-        var clockID = document.getElementById('dropdownMenuButton').getAttribute('data-value');
+        var clockID = "seiko-watch";
         document.querySelectorAll('.dropdown-item').forEach(function(item) {
             item.addEventListener('click', function(event) {
+                document.getElementById('dropdown-button').innerHTML = this.textContent;
+
                 clockID = event.target.getAttribute('data-value');
                 renderDBRecords(clockID);
 
