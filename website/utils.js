@@ -50,8 +50,12 @@ function renderDBRecords(clockID) {
                 var row = table.insertRow();
                 var cell = row.insertCell()
 
-                cell.textContent = epochToDaysAgo(item['timestamp']) + 
-                ' ' + clockTimeDelta(item['timestamp'], item['clockTimestamp']);
+                if (item['event'] == 'set') {
+                    cell.textContent = 'Time set ' + epochToDaysAgo(item['timestamp'])
+                } else if (item['event'] == 'record') {
+                    cell.textContent = epochToDaysAgo(item['timestamp']) + 
+                    ' ' + clockTimeDelta(item['timestamp'], item['clockTimestamp']);
+                }
             });
 
             tableContainer.appendChild(table);
