@@ -62,14 +62,18 @@ function renderDBRecords(clockID) {
 
             var tableBody = document.getElementById('clock-records');
  
+            data.Items.sort((a, b) => {
+                return b.timestamp - a.timestamp;
+            });
+
             data.Items.forEach(function(item) {
                 var row = tableBody.insertRow();
 
-                var actionCell = row.insertCell(0);
-                actionCell.innerHTML = capitalize(item['event']);
-
-                var dateCell = row.insertCell(1);
+                var dateCell = row.insertCell(0);
                 dateCell.innerHTML = epochToDaysAgo(item['timestamp']);
+
+                var actionCell = row.insertCell(1);
+                actionCell.innerHTML = capitalize(item['event']);
 
                 var infoCell = row.insertCell(2);
                 if (item['event'] == 'record') {
@@ -78,9 +82,20 @@ function renderDBRecords(clockID) {
                     infoCell.innerHTML = renderTimestamp(item['timestamp']);
                 }
 
+                var deleteCell = row.insertCell(3);
+
+                var icon = document.createElement('i');
+                icon.className = 'bi bi-trash';
+
+                deleteCell.innerHTML = icon.outerHTML;
+
             });
         });
     });
+}
+
+function deleteRecord(clockID, timestamp) {
+
 }
 
 function saveToDB(event, clockID) {
