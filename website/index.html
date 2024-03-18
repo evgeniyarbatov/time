@@ -120,7 +120,8 @@
         var clockRecords = document.getElementById('clock-records');  
         clockRecords.addEventListener('click', function(event) {
           if (event.target.classList.contains('delete-icon')) {
-            deleteRecord(event.target.id);
+            var timestamp = event.target.getAttribute('data-item-id');
+            deleteRecord(timestamp);
           }
         });
 

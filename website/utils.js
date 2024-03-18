@@ -92,8 +92,9 @@ function renderDBRecords(clockID) {
                     var deleteCell = row.insertCell(3);
         
                     var icon = document.createElement('i');
+                    icon.setAttribute('data-item-id', item['timestamp']);
                     icon.className = 'bi bi-trash delete-icon';
-        
+                    
                     deleteCell.innerHTML = icon.outerHTML;
                 });
             });
@@ -106,7 +107,9 @@ function deleteRecord(timestamp) {
             docClient.delete({
                 TableName: "clock-tracker",
                 Key: {
-                  timestamp: timestamp,
+                    timestamp: {
+                        N: timestamp.toString(),
+                    },
                 },
             }, function (err, data) {
                 if (err) {
