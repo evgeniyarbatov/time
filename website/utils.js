@@ -79,8 +79,6 @@ function renderDBRecords(clockID) {
                 }
 
             });
-
-            tableContainer.appendChild(table);
         });
     });
 }
