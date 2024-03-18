@@ -16,6 +16,23 @@ function clockTimeDelta(now, clockTime) {
     return clockTime > now ? delta + "s ahead" : delta + "s behind";
 }
 
+function renderTimestamp(timestamp) {
+    var date = new Date(timestamp * 1000);
+  
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+  
+    if (minutes < 10) {
+      minutes = '0' + minutes;
+    }
+  
+    return hours + ':' + minutes;
+}
+
+function capitalize(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
 function renderNotice(text) {
     const notice = document.getElementById('notice');
     notice.textContent = text;
@@ -43,19 +60,24 @@ function renderDBRecords(clockID) {
                 return;
             }
 
-            var tableContainer = document.getElementById('clock-records');
-            var table = document.createElement('table');
-
+            var tableBody = document.getElementById('clock-records');
+ 
             data.Items.forEach(function(item) {
-                var row = table.insertRow();
-                var cell = row.insertCell()
+                var row = tableBody.insertRow();
 
-                if (item['event'] == 'set') {
-                    cell.textContent = 'Time set ' + epochToDaysAgo(item['timestamp'])
-                } else if (item['event'] == 'record') {
-                    cell.textContent = epochToDaysAgo(item['timestamp']) + 
-                    ' ' + clockTimeDelta(item['timestamp'], item['clockTimestamp']);
+                var actionCell = row.insertCell(0);
+                actionCell.innerHTML = capitalize(item['event']);
+
+                var dateCell = row.insertCell(1);
+                dateCell.innerHTML = epochToDaysAgo(item['timestamp']);
+
+                var infoCell = row.insertCell(2);
+                if (item['event'] == 'record') {
+                    infoCell.innerHTML = clockTimeDelta(item['clockTimestamp'], item['timestamp']);
+                } else if (item['event'] == 'set') {
+                    infoCell.innerHTML = renderTimestamp(item['timestamp']);
                 }
+
             });
 
             tableContainer.appendChild(table);

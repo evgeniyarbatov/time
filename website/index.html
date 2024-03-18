@@ -65,7 +65,17 @@
                 <button id="set" type="button" class="btn btn-secondary">Set</button>
             </div>
         </form>
-        <div id="clock-records"></div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Action</th>
+              <th scope="col">Date</th>
+              <th scope="col">Info</th>
+            </tr>
+          </thead>
+          <tbody id="clock-records">
+          </tbody>
+        </div>
     </div>
     <script>
         function updateTime() {
