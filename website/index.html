@@ -121,7 +121,7 @@
         clockRecords.addEventListener('click', function(event) {
           if (event.target.classList.contains('delete-icon')) {
             var timestamp = event.target.getAttribute('data-item-id');
-            deleteRecord(timestamp);
+            deleteRecord(timestamp, clockID);
           }
         });
 

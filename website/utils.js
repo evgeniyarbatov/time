@@ -101,15 +101,14 @@ function renderDBRecords(clockID) {
         });
 }
 
-function deleteRecord(timestamp) {
+function deleteRecord(timestamp, clockID) {
     getDocClient()
         .then(docClient => {
             docClient.delete({
                 TableName: "clock-tracker",
                 Key: {
-                    timestamp: {
-                        N: timestamp.toString(),
-                    },
+                    'timestamp': parseInt(timestamp),
+                    'clockId': clockID,
                 },
             }, function (err, data) {
                 if (err) {
