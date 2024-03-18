@@ -117,6 +117,13 @@
             });
         });
 
+        var clockRecords = document.getElementById('clock-records');  
+        clockRecords.addEventListener('click', function(event) {
+          if (event.target.classList.contains('delete-icon')) {
+            deleteRecord(event.target.id);
+          }
+        });
+
         renderDBRecords(clockID);
     </script>
 </body>

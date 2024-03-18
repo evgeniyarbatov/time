@@ -1,7 +1,19 @@
-AWS.config.region = 'ap-southeast-1';
-AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: 'ap-southeast-1:81202562-9736-4d84-b6db-ef1ac336bba6'
-});
+function getDocClient() {
+    AWS.config.region = 'ap-southeast-1';
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: 'ap-southeast-1:81202562-9736-4d84-b6db-ef1ac336bba6'
+    });
+    return new Promise((resolve, reject) => {
+        AWS.config.credentials.get((err) => {
+          if (err) {
+            reject(err);
+          } else {
+            var docClient = new AWS.DynamoDB.DocumentClient();
+            resolve(docClient);
+          }
+        });
+      });
+}
 
 function epochToDaysAgo(epochTimestamp) {
     var currentTime = Date.now() / 1000;
@@ -40,62 +52,69 @@ function renderNotice(text) {
 }
 
 function renderDBRecords(clockID) {
-    AWS.config.credentials.get(function(err) {
-        if (err) {
-            console.error('Failed to get AWS credentials', err);
-            return;
-        }
-
-        docClient = new AWS.DynamoDB.DocumentClient();
-        docClient.scan({
-            TableName: 'clock-tracker',
-            FilterExpression: 'clockId = :id',
-            ExpressionAttributeValues: {
-                ":id": clockID,
-            },
-            Limit: 100
-        }, function(err, data) {
-            if (err) {
-                console.error('Failed to scan DynamoDB', err);
-                return;
-            }
-
-            var tableBody = document.getElementById('clock-records');
- 
-            data.Items.sort((a, b) => {
-                return b.timestamp - a.timestamp;
-            });
-
-            data.Items.forEach(function(item) {
-                var row = tableBody.insertRow();
-
-                var dateCell = row.insertCell(0);
-                dateCell.innerHTML = epochToDaysAgo(item['timestamp']);
-
-                var actionCell = row.insertCell(1);
-                actionCell.innerHTML = capitalize(item['event']);
-
-                var infoCell = row.insertCell(2);
-                if (item['event'] == 'record') {
-                    infoCell.innerHTML = clockTimeDelta(item['clockTimestamp'], item['timestamp']);
-                } else if (item['event'] == 'set') {
-                    infoCell.innerHTML = renderTimestamp(item['timestamp']);
+    getDocClient()
+        .then(docClient => {
+            docClient.scan({
+                TableName: 'clock-tracker',
+                FilterExpression: 'clockId = :id',
+                ExpressionAttributeValues: {
+                    ":id": clockID,
+                },
+                Limit: 100
+            }, function(err, data) {
+                if (err) {
+                    console.error('Failed to scan DynamoDB', err);
+                    return;
                 }
-
-                var deleteCell = row.insertCell(3);
-
-                var icon = document.createElement('i');
-                icon.className = 'bi bi-trash';
-
-                deleteCell.innerHTML = icon.outerHTML;
-
+        
+                var tableBody = document.getElementById('clock-records');
+        
+                data.Items.sort((a, b) => {
+                    return b.timestamp - a.timestamp;
+                });
+        
+                data.Items.forEach(function(item) {
+                    var row = tableBody.insertRow();
+        
+                    var dateCell = row.insertCell(0);
+                    dateCell.innerHTML = epochToDaysAgo(item['timestamp']);
+        
+                    var actionCell = row.insertCell(1);
+                    actionCell.innerHTML = capitalize(item['event']);
+        
+                    var infoCell = row.insertCell(2);
+                    if (item['event'] == 'record') {
+                        infoCell.innerHTML = clockTimeDelta(item['clockTimestamp'], item['timestamp']);
+                    } else if (item['event'] == 'set') {
+                        infoCell.innerHTML = renderTimestamp(item['timestamp']);
+                    }
+        
+                    var deleteCell = row.insertCell(3);
+        
+                    var icon = document.createElement('i');
+                    icon.className = 'bi bi-trash delete-icon';
+        
+                    deleteCell.innerHTML = icon.outerHTML;
+                });
             });
         });
-    });
 }
 
-function deleteRecord(clockID, timestamp) {
-
+function deleteRecord(timestamp) {
+    getDocClient()
+        .then(docClient => {
+            docClient.delete({
+                TableName: "clock-tracker",
+                Key: {
+                  timestamp: timestamp,
+                },
+            }, function (err, data) {
+                if (err) {
+                    console.error('Failed to delete from DynamoDB', err);
+                    return;
+                }
+            });
+        });
 }
 
 function saveToDB(event, clockID) {
