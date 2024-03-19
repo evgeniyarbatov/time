@@ -40,6 +40,9 @@ input[type='number']::-webkit-outer-spin-button {
     width: 100%;
     text-align: center;
 }
+#clock-form {
+    width: 100%;
+}
 table { 
     width: 100%;
     font-size: 12px;
