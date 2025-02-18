@@ -22,17 +22,11 @@ const ClockTracker = () => {
   return (
     <div className="container">
         <div className="clock-digits">
-            <div className="input-container">
-                <input type="number" id="hours" value={hours} min="0" max="23" />
-            </div>
-            <div className="input-container">
-                <label>:</label>
-                <input type="number" id="minutes" value={minutes} min="0" max="59" />
-            </div>
-            <div className="input-container">
-                <label>:</label>
-                <input type="number" id="seconds" value={seconds} min="0" max="59" />
-            </div>
+            <span className="time">{hours.toString().padStart(2, '0')}</span>
+            <span className="separator">:</span>
+            <span className="time">{minutes.toString().padStart(2, '0')}</span>
+            <span className="separator">:</span>
+            <span className="time">{seconds.toString().padStart(2, '0')}</span>
         </div>
     </div>
   );
