@@ -1,3 +1,7 @@
-output "website_url" {
-  value = "https://${var.domain_name}/${var.path_name}/index.html"
+output "url" {
+  value = "https://${var.s3_bucket}"
+}
+
+output "public_url" {
+  value = "http://${aws_s3_bucket.bucket.bucket}.s3-website-${data.aws_region.current.name}.amazonaws.com"
 }

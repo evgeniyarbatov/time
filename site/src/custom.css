@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.clock-digits {
+    display: flex;
+    align-items: center;
+    font-size: 20vw;
+    font-weight: bold;
+    color: black;
+}
+
+.time, .separator {
+    display: inline-block;  /* Ensures proper spacing */
+    text-align: center;
+    min-width: 8vw;  /* Forces digits to have equal width */
+}
+
+.separator {
+    min-width: 4vw;  /* Ensures colons don’t shift the layout */
+}

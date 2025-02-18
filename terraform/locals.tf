@@ -1,6 +1,4 @@
 locals {
-  website_dir = "${path.module}/../website/"
-
   content_types = {
     ".html" : "text/html",
     ".css" : "text/css",
