@@ -8,6 +8,8 @@ export default defineConfig({
     react(),
     legacy({
       targets: ['defaults', 'Android >= 6'],
+      modernTargets: ['chromeAndroid >= 61', 'chrome >= 61'],
+      modernPolyfills: true,
     }),
   ],
 })
