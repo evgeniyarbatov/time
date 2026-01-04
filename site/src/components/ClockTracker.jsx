@@ -52,13 +52,13 @@ const ClockTracker = () => {
 
   return (
     <div className="container" ref={containerRef}>
-        <div className="clock-digits" ref={digitsRef}>
-            <span className="time">{hours.toString().padStart(2, '0')}</span>
-            <span className="separator">:</span>
-            <span className="time">{minutes.toString().padStart(2, '0')}</span>
-            <span className="separator">:</span>
-            <span className="time">{seconds.toString().padStart(2, '0')}</span>
-        </div>
+      <div className="clock-digits" ref={digitsRef}>
+        <span className="time">{hours.toString().padStart(2, "0")}</span>
+        <span className="separator">:</span>
+        <span className="time">{minutes.toString().padStart(2, "0")}</span>
+        <span className="separator">:</span>
+        <span className="time">{seconds.toString().padStart(2, "0")}</span>
+      </div>
     </div>
   );
 };
