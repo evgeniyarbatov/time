@@ -12,4 +12,8 @@ export default defineConfig({
       modernPolyfills: true,
     }),
   ],
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.js',
+  },
 })

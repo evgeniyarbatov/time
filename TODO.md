@@ -1,2 +1,4 @@
 - [x] Does not render on older Android when I install as Chrome app
 - [x] Add footer on when the site was last accessed
+- [x] Add basic tests
+- [x] Update logo
