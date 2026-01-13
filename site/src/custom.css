@@ -19,6 +19,7 @@ html, body {
     align-items: center;
     width: 100vw;
     height: 100vh;
+    position: relative;
 }
 
 .clock-digits {
@@ -40,4 +41,18 @@ html, body {
 
 .separator {
     min-width: 4vw;  /* Ensures colons don’t shift the layout */
+}
+
+.last-accessed {
+    position: absolute;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(0.65rem, 1.8vw, 0.9rem);
+    color: #a0a0a0;
+    letter-spacing: 0.02em;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    max-width: 90vw;
 }
