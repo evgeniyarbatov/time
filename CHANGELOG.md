@@ -5,3 +5,4 @@
 - [x] Add screenshot tests
 - [x] Optimize for SEO
 - [x] Made colon centered vertically
+- [x] Support dark mode
