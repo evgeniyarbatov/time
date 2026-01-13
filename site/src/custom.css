@@ -34,13 +34,16 @@ html, body {
 }
 
 .time, .separator {
-    display: inline-block;  /* Ensures proper spacing */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     min-width: 8vw;  /* Forces digits to have equal width */
 }
 
 .separator {
     min-width: 4vw;  /* Ensures colons don’t shift the layout */
+    transform: translateY(-0.08em);
 }
 
 .last-accessed {
