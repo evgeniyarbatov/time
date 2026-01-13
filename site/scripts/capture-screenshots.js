@@ -8,6 +8,7 @@ import { chromium } from "playwright";
 const port = 4173;
 const baseUrl = `http://127.0.0.1:${port}/`;
 const screenshotsDir = path.join(process.cwd(), "screenshots");
+const lastAccessedAt = Date.now() - (2 * 3600 + 5 * 60) * 1000;
 
 const viewports = [
   { name: "mobile-360x800", width: 360, height: 800 },
@@ -72,14 +73,22 @@ const captureScreenshots = async () => {
 
     try {
       for (const viewport of viewports) {
-        const page = await browser.newPage({ viewport });
+        const context = await browser.newContext({ viewport });
+        await context.addCookies([
+          {
+            name: "lastAccessedAt",
+            value: String(lastAccessedAt),
+            url: baseUrl,
+          },
+        ]);
+        const page = await context.newPage();
         await page.goto(baseUrl, { waitUntil: "networkidle" });
         await page.waitForSelector(".clock-digits");
         await page.screenshot({
           path: path.join(screenshotsDir, `${viewport.name}.png`),
           fullPage: true,
         });
-        await page.close();
+        await context.close();
       }
     } finally {
       await browser.close();

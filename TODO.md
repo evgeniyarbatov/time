@@ -2,3 +2,4 @@
 - [x] Add footer on when the site was last accessed
 - [x] Add basic tests
 - [x] Update logo
+- [x] Add screenshot tests
