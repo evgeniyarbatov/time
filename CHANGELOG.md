@@ -6,3 +6,4 @@
 - [x] Optimize for SEO
 - [x] Made colon centered vertically
 - [x] Support dark mode
+- [x] Google Analytics

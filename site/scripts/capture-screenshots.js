@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { mkdir } from "node:fs/promises";
+import { mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
@@ -8,21 +8,23 @@ import { chromium } from "playwright";
 const port = 4173;
 const baseUrl = `http://127.0.0.1:${port}/`;
 const screenshotsDir = path.join(process.cwd(), "screenshots");
-const lastAccessedAt = Date.now() - (2 * 3600 + 5 * 60) * 1000;
 const deviceScaleFactor = 2;
 
 const viewports = [
-  { name: "mobile-360x800", width: 360, height: 800 },
   { name: "mobile-375x667", width: 375, height: 667 },
-  { name: "mobile-390x844", width: 390, height: 844 },
-  { name: "mobile-428x926", width: 428, height: 926 },
   { name: "desktop-1366x768", width: 1366, height: 768 },
-  { name: "desktop-1440x900", width: 1440, height: 900 },
-  { name: "desktop-1920x1080", width: 1920, height: 1080 },
 ];
 const colorSchemes = [
   { name: "light", suffix: "", colorScheme: "light" },
   { name: "dark", suffix: "-dark", colorScheme: "dark" },
+];
+const lastAccessedOptions = [
+  { name: "last-minute", maxDays: 0, maxHours: 0, maxMinutes: 0, maxSeconds: 59 },
+  { name: "last-hour", maxDays: 0, maxHours: 0, maxMinutes: 59, maxSeconds: 59 },
+  { name: "last-day", maxDays: 0, maxHours: 23, maxMinutes: 59, maxSeconds: 59 },
+  { name: "last-week", maxDays: 6, maxHours: 23, maxMinutes: 59, maxSeconds: 59 },
+  { name: "last-month", maxDays: 29, maxHours: 23, maxMinutes: 59, maxSeconds: 59 },
+  { name: "last-year", maxDays: 364, maxHours: 23, maxMinutes: 59, maxSeconds: 59 },
 ];
 
 const run = (command, args) =>
@@ -38,6 +40,33 @@ const run = (command, args) =>
     child.on("error", reject);
   });
 
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
+const randomOffsetMs = ({ maxDays, maxHours, maxMinutes, maxSeconds }) => {
+  const days = randomInt(0, maxDays);
+  const hours = randomInt(0, maxHours);
+  const minutes = randomInt(0, maxMinutes);
+  const seconds = randomInt(0, maxSeconds);
+  const totalSeconds =
+    ((days * 24 + hours) * 60 + minutes) * 60 + seconds;
+  return Math.max(totalSeconds, 1) * 1000;
+};
+
+const buildUniqueOffsetGenerator = () => {
+  const usedOffsets = new Map();
+  return (option) => {
+    const usedForOption = usedOffsets.get(option.name) ?? new Set();
+    let offsetMs = randomOffsetMs(option);
+    while (usedForOption.has(offsetMs)) {
+      offsetMs = randomOffsetMs(option);
+    }
+    usedForOption.add(offsetMs);
+    usedOffsets.set(option.name, usedForOption);
+    return offsetMs;
+  };
+};
+
 const waitForServer = async () => {
   for (let attempt = 0; attempt < 30; attempt += 1) {
     try {
@@ -52,6 +81,7 @@ const waitForServer = async () => {
 };
 
 const captureScreenshots = async () => {
+  await rm(screenshotsDir, { recursive: true, force: true });
   await mkdir(screenshotsDir, { recursive: true });
 
   await run("npm", ["run", "build"]);
@@ -75,35 +105,39 @@ const captureScreenshots = async () => {
     await waitForServer();
 
     const browser = await chromium.launch();
+    const getUniqueOffsetMs = buildUniqueOffsetGenerator();
 
     try {
       for (const viewport of viewports) {
         for (const scheme of colorSchemes) {
-          const context = await browser.newContext({
-            viewport,
-            colorScheme: scheme.colorScheme,
-            deviceScaleFactor,
-          });
-          await context.addCookies([
-            {
-              name: "lastAccessedAt",
-              value: String(lastAccessedAt),
-              url: baseUrl,
-            },
-          ]);
-          const page = await context.newPage();
-          await page.emulateMedia({ colorScheme: scheme.colorScheme });
-          await page.goto(baseUrl, { waitUntil: "networkidle" });
-          await page.waitForSelector(".clock-digits");
-          await page.screenshot({
-            path: path.join(
-              screenshotsDir,
-              `${viewport.name}${scheme.suffix}.png`
-            ),
-            fullPage: true,
-            scale: "device",
-          });
-          await context.close();
+          for (const option of lastAccessedOptions) {
+            const context = await browser.newContext({
+              viewport,
+              colorScheme: scheme.colorScheme,
+              deviceScaleFactor,
+            });
+            const offsetMs = getUniqueOffsetMs(option);
+            await context.addCookies([
+              {
+                name: "lastAccessedAt",
+                value: String(Date.now() - offsetMs),
+                url: baseUrl,
+              },
+            ]);
+            const page = await context.newPage();
+            await page.emulateMedia({ colorScheme: scheme.colorScheme });
+            await page.goto(baseUrl, { waitUntil: "networkidle" });
+            await page.waitForSelector(".clock-digits");
+            await page.screenshot({
+              path: path.join(
+                screenshotsDir,
+                `${viewport.name}${scheme.suffix}-${option.name}.png`
+              ),
+              fullPage: true,
+              scale: "device",
+            });
+            await context.close();
+          }
         }
       }
     } finally {
