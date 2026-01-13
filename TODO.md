@@ -3,3 +3,4 @@
 - [x] Add basic tests
 - [x] Update logo
 - [x] Add screenshot tests
+- [x] Optimize for SEO
