@@ -9,6 +9,7 @@ const port = 4173;
 const baseUrl = `http://127.0.0.1:${port}/`;
 const screenshotsDir = path.join(process.cwd(), "screenshots");
 const lastAccessedAt = Date.now() - (2 * 3600 + 5 * 60) * 1000;
+const deviceScaleFactor = 2;
 
 const viewports = [
   { name: "mobile-360x800", width: 360, height: 800 },
@@ -18,6 +19,10 @@ const viewports = [
   { name: "desktop-1366x768", width: 1366, height: 768 },
   { name: "desktop-1440x900", width: 1440, height: 900 },
   { name: "desktop-1920x1080", width: 1920, height: 1080 },
+];
+const colorSchemes = [
+  { name: "light", suffix: "", colorScheme: "light" },
+  { name: "dark", suffix: "-dark", colorScheme: "dark" },
 ];
 
 const run = (command, args) =>
@@ -73,22 +78,33 @@ const captureScreenshots = async () => {
 
     try {
       for (const viewport of viewports) {
-        const context = await browser.newContext({ viewport });
-        await context.addCookies([
-          {
-            name: "lastAccessedAt",
-            value: String(lastAccessedAt),
-            url: baseUrl,
-          },
-        ]);
-        const page = await context.newPage();
-        await page.goto(baseUrl, { waitUntil: "networkidle" });
-        await page.waitForSelector(".clock-digits");
-        await page.screenshot({
-          path: path.join(screenshotsDir, `${viewport.name}.png`),
-          fullPage: true,
-        });
-        await context.close();
+        for (const scheme of colorSchemes) {
+          const context = await browser.newContext({
+            viewport,
+            colorScheme: scheme.colorScheme,
+            deviceScaleFactor,
+          });
+          await context.addCookies([
+            {
+              name: "lastAccessedAt",
+              value: String(lastAccessedAt),
+              url: baseUrl,
+            },
+          ]);
+          const page = await context.newPage();
+          await page.emulateMedia({ colorScheme: scheme.colorScheme });
+          await page.goto(baseUrl, { waitUntil: "networkidle" });
+          await page.waitForSelector(".clock-digits");
+          await page.screenshot({
+            path: path.join(
+              screenshotsDir,
+              `${viewport.name}${scheme.suffix}.png`
+            ),
+            fullPage: true,
+            scale: "device",
+          });
+          await context.close();
+        }
       }
     } finally {
       await browser.close();
