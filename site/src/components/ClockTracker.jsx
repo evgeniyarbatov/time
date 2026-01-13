@@ -3,14 +3,22 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 const LAST_ACCESS_COOKIE = "lastAccessedAt";
 
 const getCookieValue = (name) => {
-  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
+  try {
+    const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+    return match ? decodeURIComponent(match[1]) : null;
+  } catch {
+    return null;
+  }
 };
 
 const setCookie = (name, value, maxAgeSeconds) => {
-  document.cookie = `${name}=${encodeURIComponent(
-    value
-  )}; max-age=${maxAgeSeconds}; path=/`;
+  try {
+    document.cookie = `${name}=${encodeURIComponent(
+      value
+    )}; max-age=${maxAgeSeconds}; path=/`;
+  } catch {
+    return;
+  }
 };
 
 const getElapsedTime = (startTimestamp) => {
