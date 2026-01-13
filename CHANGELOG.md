@@ -7,3 +7,4 @@
 - [x] Made colon centered vertically
 - [x] Support dark mode
 - [x] Google Analytics
+- [x] Make it work offline
