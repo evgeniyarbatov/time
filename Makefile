@@ -8,6 +8,7 @@ run:
 
 test:
 	cd $(SITE_DIR) && npm test
+	cd $(SITE_DIR) && npm run screenshots
 
 deploy:
 	cd $(SITE_DIR) && npm run build
