@@ -8,3 +8,6 @@
 - [x] Support dark mode
 - [x] Google Analytics
 - [x] Make it work offline
+- [ ] Arrange digits vertically when on the mobile screen
+- [ ] Cleanup unused JS and CSS code
+- [ ] What other simple tests can be added?

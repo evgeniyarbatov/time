@@ -1,0 +1,2 @@
+- The simplicity of this page is what draws it to me. I like the practical aspect too. This is useful. I have evolved this design over some time. What do I learn from working on this project?
+- How can this be even better and more useful without building too much into the simple page? This is the kind of tension every project that does well experiences
