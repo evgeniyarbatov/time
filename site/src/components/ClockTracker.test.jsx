@@ -1,5 +1,7 @@
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import fs from "node:fs";
+import path from "node:path";
 
 import ClockTracker from "./ClockTracker";
 
@@ -89,4 +91,47 @@ it("shows elapsed time from the lastAccessedAt cookie", async () => {
       screen.getByText("Last accessed 2 hours and 5 minutes ago")
     ).toBeInTheDocument();
   });
+});
+
+it("shows colons on desktop but hides them on mobile", () => {
+  render(<ClockTracker />);
+
+  expect(screen.getAllByText(":")).toHaveLength(2);
+
+  const cssPath = path.join(process.cwd(), "src", "custom.css");
+  const css = fs.readFileSync(cssPath, "utf8");
+
+  expect(css).toMatch(/\.separator\s*\{[^}]*display:\s*inline-flex/i);
+
+  const mobileIndex = css.indexOf("@media (max-width: 640px)");
+  expect(mobileIndex).toBeGreaterThan(-1);
+
+  const mobileCss = css.slice(mobileIndex);
+  expect(mobileCss).toMatch(/\.separator\s*\{[^}]*display:\s*none/i);
+});
+
+it("renders even if cookie access fails (Safari blocked cookies)", () => {
+  const hadOwnCookie = Object.prototype.hasOwnProperty.call(document, "cookie");
+  const originalDescriptor = Object.getOwnPropertyDescriptor(document, "cookie");
+
+  Object.defineProperty(document, "cookie", {
+    configurable: true,
+    get() {
+      throw new Error("Cookies blocked");
+    },
+    set() {
+      throw new Error("Cookies blocked");
+    },
+  });
+
+  try {
+    expect(() => render(<ClockTracker />)).not.toThrow();
+    expect(screen.getAllByText(":")).toHaveLength(2);
+  } finally {
+    if (hadOwnCookie && originalDescriptor) {
+      Object.defineProperty(document, "cookie", originalDescriptor);
+    } else {
+      delete document.cookie;
+    }
+  }
 });
