@@ -112,13 +112,15 @@ const ClockTracker = () => {
   }, [fitDigits]);
 
   return (
-    <div className="container" ref={containerRef}>
-      <div className="clock-digits" ref={digitsRef}>
-        <span className="time">{hours.toString().padStart(2, "0")}</span>
-        <span className="separator">:</span>
-        <span className="time">{minutes.toString().padStart(2, "0")}</span>
-        <span className="separator">:</span>
-        <span className="time">{seconds.toString().padStart(2, "0")}</span>
+    <div className="container">
+      <div className="clock-stage" ref={containerRef}>
+        <div className="clock-digits" ref={digitsRef}>
+          <span className="time">{hours.toString().padStart(2, "0")}</span>
+          <span className="separator">:</span>
+          <span className="time">{minutes.toString().padStart(2, "0")}</span>
+          <span className="separator">:</span>
+          <span className="time">{seconds.toString().padStart(2, "0")}</span>
+        </div>
       </div>
       {elapsedText ? (
         <div className="last-accessed">Last accessed {elapsedText} ago</div>
