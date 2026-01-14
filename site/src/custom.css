@@ -71,6 +71,20 @@ html, body {
     transform: translateY(-0.08em);
 }
 
+.last-accessed {
+    position: absolute;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(0.65rem, 1.8vw, 0.9rem);
+    color: var(--muted-color);
+    letter-spacing: 0.02em;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    max-width: 90vw;
+}
+
 @media (max-width: 640px) {
     .container {
         flex-direction: column;
@@ -104,18 +118,4 @@ html, body {
         transform: none;
         margin: 12px 0 16px;
     }
-}
-
-.last-accessed {
-    position: absolute;
-    bottom: 48px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: clamp(0.65rem, 1.8vw, 0.9rem);
-    color: var(--muted-color);
-    letter-spacing: 0.02em;
-    text-align: center;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    max-width: 90vw;
 }
