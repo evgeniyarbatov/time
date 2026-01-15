@@ -36,7 +36,8 @@ html, body {
     width: 100vw;
     height: 100vh;
     position: relative;
-    padding: 16px 8px;
+    padding: 24px 12px 16px;
+    padding-top: calc(24px + env(safe-area-inset-top));
 }
 
 .clock-stage {
@@ -90,6 +91,7 @@ html, body {
     .container {
         flex-direction: column;
         justify-content: flex-start;
+        padding-top: calc(48px + env(safe-area-inset-top));
     }
 
     .clock-stage {

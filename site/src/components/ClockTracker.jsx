@@ -98,7 +98,7 @@ const ClockTracker = () => {
       containerWidth / digitsWidth,
       containerHeight / digitsHeight
     );
-    digits.style.fontSize = `${baseSize * scale}px`;
+    digits.style.fontSize = `${baseSize * scale * 0.94}px`;
   }, []);
 
   useLayoutEffect(() => {
