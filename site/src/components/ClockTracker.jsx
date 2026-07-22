@@ -57,9 +57,35 @@ const ClockTracker = () => {
   };
 
   useEffect(() => {
+    let timeoutId;
+
+    const msUntilNextSecond = () => {
+      const remainder = Date.now() % 1000;
+      return remainder === 0 ? 1000 : 1000 - remainder;
+    };
+
+    const scheduleNext = () => {
+      timeoutId = setTimeout(() => {
+        updateTime();
+        scheduleNext();
+      }, msUntilNextSecond());
+    };
+
     updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
+    scheduleNext();
+
+    const handleVisibility = () => {
+      if (document.visibilityState !== "visible") return;
+      clearTimeout(timeoutId);
+      updateTime();
+      scheduleNext();
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, []);
 
   useEffect(() => {

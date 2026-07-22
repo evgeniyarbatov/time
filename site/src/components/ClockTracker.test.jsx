@@ -58,8 +58,9 @@ describe.each([
   });
 });
 
-it("ticks every second", async () => {
-  const fixedDate = new Date("2024-01-15T12:34:56Z");
+it("ticks on the next second boundary", async () => {
+  // Mid-second so a naive 1000ms interval would lag the wall-clock flip.
+  const fixedDate = new Date("2024-01-15T12:34:56.400Z");
 
   await withTimezone("UTC", async () => {
     vi.useFakeTimers();
@@ -69,10 +70,38 @@ it("ticks every second", async () => {
     expect(readClockTime(container)).toBe("12:34:56");
 
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(1000);
+      await vi.advanceTimersByTimeAsync(599);
+    });
+    expect(readClockTime(container)).toBe("12:34:56");
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1);
+    });
+    expect(readClockTime(container)).toBe("12:34:57");
+  });
+});
+
+it("refreshes immediately when the tab becomes visible again", async () => {
+  const fixedDate = new Date("2024-01-15T12:34:56.400Z");
+
+  await withTimezone("UTC", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(fixedDate);
+    const { container } = render(<ClockTracker />);
+
+    expect(readClockTime(container)).toBe("12:34:56");
+
+    vi.setSystemTime(new Date("2024-01-15T12:34:59.100Z"));
+    Object.defineProperty(document, "visibilityState", {
+      configurable: true,
+      get: () => "visible",
     });
 
-    expect(readClockTime(container)).toBe("12:34:57");
+    await act(async () => {
+      document.dispatchEvent(new Event("visibilitychange"));
+    });
+
+    expect(readClockTime(container)).toBe("12:34:59");
   });
 });
 
