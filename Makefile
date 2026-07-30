@@ -6,7 +6,8 @@ all: deploy
 install:
 	cd $(SITE_DIR) && npm install
 
-run:
+# Entry point: run the site locally
+run: install
 	cd $(SITE_DIR) && npm run dev
 
 test: install
