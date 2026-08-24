@@ -1,1 +1,2 @@
 - [ ] I want to create a visual story of how the design of this page has evolved. I think it makes for a good story I can post on X. Use version control to go back to what I had previously where I had selection of clocks
+- [ ] No CI — `make deploy` builds and applies terraform straight to production with no automated test run first; `make test`/`make screenshots` only run if invoked locally.
