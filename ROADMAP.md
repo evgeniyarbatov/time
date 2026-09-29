@@ -6,7 +6,7 @@ Small in scope, but genuinely finished — deployed, offline-capable, polished d
 
 ## What it opens up
 
-The TODO already names the real next move: a visual retrospective of how the design evolved, pulled from git history (the clock apparently once offered a style picker before narrowing to one). The interesting part isn't the clock — it's that "turn a repo's git history into a shareable design story" is a repeatable format, not a one-off. This is just the first, cleanest case study for it.
+The real next move is a visual retrospective of how the design evolved, pulled from git history (the clock apparently once offered a style picker before narrowing to one). The interesting part isn't the clock — it's that "turn a repo's git history into a shareable design story" is a repeatable format, not a one-off. This is just the first, cleanest case study for it.
 
 ## Capability this builds
 

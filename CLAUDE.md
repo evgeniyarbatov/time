@@ -1,12 +1,12 @@
 # time
 
-A minimal full-screen clock web app (React + Vite), installable as an offline-capable PWA. Hosted on GitHub Pages at https://evgeniyarbatov.github.io/time/.
+A minimal full-screen clock web app (React + Vite), installable as an offline-capable PWA. Hosted on GitHub Pages at https://evgeniyarbatov.github.io/time/ from a public repo.
 
 ## Entry points
 
 - `site/src/App.jsx` — root component, renders `ClockTracker`.
 - `site/src/components/ClockTracker.jsx` — the clock itself.
-- `site/src/sw.js` (public) — service worker for offline support.
+- `site/public/sw.js` — service worker for offline support.
 - `.github/workflows/deploy.yml` — tests, builds and deploys to Pages on every push to `main`.
 
 ## How to run
@@ -15,7 +15,7 @@ A minimal full-screen clock web app (React + Vite), installable as an offline-ca
 make run
 ```
 
-Installs npm deps and starts the Vite dev server in `site/`.
+Installs npm deps and starts the Vite dev server in `site/`, at `/time/`.
 
 ## Other Makefile targets
 
@@ -27,5 +27,6 @@ Installs npm deps and starts the Vite dev server in `site/`.
 
 - All app code lives under `site/`.
 - The site is served under `/time/` (Vite `base`); keep asset, manifest and service-worker paths relative to it, never root-absolute.
+- `site/public/sitemap.xml` is regenerated on every build; edit `site/scripts/generate-sitemap.js` instead.
 - Pushing to `main` deploys to production.
-- Outstanding work is tracked in `TODO.md` and `CHANGELOG.md`, not GitHub issues.
+- `ROADMAP.md` holds the project's direction; there is no task tracker.
