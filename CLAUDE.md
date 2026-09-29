@@ -1,13 +1,13 @@
 # time
 
-A minimal full-screen clock web app (React + Vite), installable as an offline-capable PWA. Deployed to AWS S3 via Terraform.
+A minimal full-screen clock web app (React + Vite), installable as an offline-capable PWA. Hosted on GitHub Pages at https://evgeniyarbatov.github.io/time/.
 
 ## Entry points
 
 - `site/src/App.jsx` — root component, renders `ClockTracker`.
 - `site/src/components/ClockTracker.jsx` — the clock itself.
 - `site/src/sw.js` (public) — service worker for offline support.
-- `terraform/` — S3 bucket + policy for static hosting.
+- `.github/workflows/deploy.yml` — tests, builds and deploys to Pages on every push to `main`.
 
 ## How to run
 
@@ -21,10 +21,11 @@ Installs npm deps and starts the Vite dev server in `site/`.
 
 - `make test` — run vitest unit tests.
 - `make screenshots` — capture Playwright screenshots (needs browser deps).
-- `make deploy` — build the site and `terraform apply` (requires AWS credentials).
+- `make build` — production build into `site/dist`.
 
 ## Conventions / gotchas
 
-- All app code lives under `site/`; Terraform lives under `terraform/`.
-- `deploy` applies real infrastructure changes — don't run it without configured AWS credentials and a reviewed terraform plan.
+- All app code lives under `site/`.
+- The site is served under `/time/` (Vite `base`); keep asset, manifest and service-worker paths relative to it, never root-absolute.
+- Pushing to `main` deploys to production.
 - Outstanding work is tracked in `TODO.md` and `CHANGELOG.md`, not GitHub issues.

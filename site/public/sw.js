@@ -1,6 +1,6 @@
 const CACHE_VERSION = "v3";
 const CACHE_NAME = `time-cache-${CACHE_VERSION}`;
-const CORE_ASSETS = ["/", "/index.html", "/manifest.webmanifest", "/clock.svg"];
+const CORE_ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./clock.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -45,7 +45,7 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
           return response;
         })
-        .catch(() => caches.match("/index.html"))
+        .catch(() => caches.match("./index.html"))
     );
     return;
   }

@@ -6,7 +6,7 @@ import process from "node:process";
 import { chromium } from "playwright";
 
 const port = 4173;
-const baseUrl = `http://127.0.0.1:${port}/`;
+const baseUrl = `http://127.0.0.1:${port}/time/`;
 const screenshotsDir = path.join(process.cwd(), "screenshots");
 const deviceScaleFactor = 2;
 

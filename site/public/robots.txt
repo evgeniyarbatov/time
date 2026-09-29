@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://time.gritcuriosityandperseverance.org/sitemap.xml
+Sitemap: https://evgeniyarbatov.github.io/time/sitemap.xml

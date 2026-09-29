@@ -2,7 +2,7 @@ import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
-const defaultSiteUrl = "https://time.gritcuriosityandperseverance.org";
+const defaultSiteUrl = "https://evgeniyarbatov.github.io/time";
 const siteUrl = (process.env.SITE_URL || defaultSiteUrl).replace(/\/+$/, "");
 const lastmod = new Date().toISOString().split("T")[0];
 

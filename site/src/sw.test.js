@@ -55,10 +55,10 @@ describe("service worker offline behavior", () => {
 
     expect(cache.addAll).toHaveBeenCalledWith(
       expect.arrayContaining([
-        "/",
-        "/index.html",
-        "/manifest.webmanifest",
-        "/clock.svg",
+        "./",
+        "./index.html",
+        "./manifest.webmanifest",
+        "./clock.svg",
       ])
     );
   });
@@ -82,6 +82,6 @@ describe("service worker offline behavior", () => {
     });
 
     await expect(responsePromise).resolves.toBe("offline-index");
-    expect(caches.match).toHaveBeenCalledWith("/index.html");
+    expect(caches.match).toHaveBeenCalledWith("./index.html");
   });
 });

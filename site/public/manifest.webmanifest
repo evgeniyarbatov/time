@@ -1,13 +1,13 @@
 {
   "name": "Time — Local Clock",
   "short_name": "Time",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "/clock.svg",
+      "src": "clock.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
