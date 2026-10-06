@@ -21,8 +21,8 @@
     "@types/react-dom": "^19.0.3",
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^16.1.0",
-    "@vitejs/plugin-legacy": "^6.1.1",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-legacy": "^8.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
     "eslint": "^9.19.0",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.0.0",
@@ -30,7 +30,7 @@
     "globals": "^15.14.0",
     "jsdom": "^26.0.0",
     "playwright": "^1.49.1",
-    "vitest": "^2.1.5",
-    "vite": "^6.1.0"
+    "vitest": "^5.0.3",
+    "vite": "^8.3.3"
   }
 }
