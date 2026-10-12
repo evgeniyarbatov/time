@@ -4,6 +4,12 @@ A full-screen local clock for setting watches and clocks: https://evgeniyarbatov
 
 <img width="1561" height="941" alt="Screenshot 2026-01-13 at 9 02 01 AM" src="https://github.com/user-attachments/assets/b9adc454-41d3-490f-864f-4cc677135096" />
 
+## Status
+
+| Folder | Status | Last touched | Next step |
+|---|---|---|---|
+| root | active | 2026-09-29 | — |
+
 ## What it does
 
 - Shows the device's local time as `HH:MM:SS`, scaled to fill the screen.
